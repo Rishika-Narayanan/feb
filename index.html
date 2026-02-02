@@ -55,12 +55,8 @@
       font-size: 1.3rem;
       letter-spacing: 2px;
       cursor: pointer;
-      transition: all 0.2s ease;
       position: absolute;
-    }
-
-    button:hover {
-      background: rgba(0, 0, 0, 0.03);
+      transition: all 0.4s ease;
     }
 
     #no {
@@ -106,6 +102,7 @@
     const noBtn = document.getElementById("no");
     const yesBtn = document.getElementById("yes");
     const finalMsg = document.getElementById("final");
+    const area = document.querySelector(".play-area");
 
     const noTexts = [
       "NO",
@@ -113,55 +110,53 @@
       "Really?",
       "Think again",
       "Bad choice",
-      "Last chance",
-      "Still no?"
+      "Still no?",
+      "Just say yes"
     ];
 
-    let attempts = 0;
+    let noAttempts = 0;
+    let yesMoves = 0;
+
+    function randomPosition(btn) {
+      const maxX = area.clientWidth - btn.offsetWidth;
+      const maxY = area.clientHeight - btn.offsetHeight;
+      btn.style.left = Math.random() * maxX + "px";
+      btn.style.top = Math.random() * maxY + "px";
+      btn.style.transform = "none";
+    }
 
     function moveNo() {
-      attempts++;
+      noAttempts++;
+      noBtn.innerText = noTexts[Math.min(noAttempts, noTexts.length - 1)];
+      randomPosition(noBtn);
 
-      // Change NO text
-      noBtn.innerText = noTexts[Math.min(attempts, noTexts.length - 1)];
-
-      const area = document.querySelector(".play-area");
-      const maxX = area.clientWidth - noBtn.offsetWidth;
-      const maxY = area.clientHeight - noBtn.offsetHeight;
-
-      const x = Math.random() * maxX;
-      const y = Math.random() * maxY;
-
-      noBtn.style.left = x + "px";
-      noBtn.style.top = y + "px";
-      noBtn.style.transform = "none";
-
-      // Slowly reveal YES (but still sneaky)
-      if (attempts >= 3) {
-        yesBtn.style.opacity = "0.15";
+      // Reveal YES slowly
+      if (noAttempts >= 3) {
+        yesBtn.style.opacity = "0.25";
         yesBtn.style.pointerEvents = "auto";
-
-        yesBtn.style.top = Math.random() * maxY + "px";
-        yesBtn.style.left = Math.random() * maxX + "px";
+        randomPosition(yesBtn);
       }
-
-      if (attempts >= 5) {
-        yesBtn.style.opacity = "0.35";
-      }
-
-      if (attempts >= 7) {
-        yesBtn.style.opacity = "0.6";
-      }
+      if (noAttempts >= 5) yesBtn.style.opacity = "0.5";
+      if (noAttempts >= 7) yesBtn.style.opacity = "0.8";
     }
 
     noBtn.addEventListener("mouseover", moveNo);
     noBtn.addEventListener("click", moveNo);
 
     yesBtn.addEventListener("mouseover", () => {
-      // YES moves slightly too, just to be evil
-      const area = document.querySelector(".play-area");
-      yesBtn.style.top = Math.random() * (area.clientHeight - 80) + "px";
-      yesBtn.style.left = Math.random() * (area.clientWidth - 120) + "px";
+      yesMoves++;
+
+      // YES only dodges a few times
+      if (yesMoves <= 3) {
+        randomPosition(yesBtn);
+      } else if (yesMoves <= 5) {
+        // slower, smaller movement
+        yesBtn.style.transition = "all 0.8s ease";
+        randomPosition(yesBtn);
+      } else {
+        // stops moving completely
+        yesBtn.style.transition = "none";
+      }
     });
 
     yesBtn.addEventListener("click", () => {
