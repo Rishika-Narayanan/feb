@@ -61,17 +61,39 @@
     </div>
   </div>
 
-  <script>
-    const noButton = document.getElementById("no");
+ <script>
+  const noButton = document.getElementById("no");
 
-    noButton.addEventListener("mouseover", () => {
-      const x = Math.random() * (window.innerWidth - 100);
-      const y = Math.random() * (window.innerHeight - 50);
-      noButton.style.left = x + "px";
-      noButton.style.top = y + "px";
-    });
+  const noTexts = [
+    "No 🙄",
+    "Are you sure?",
+    "Really sure??",
+    "Pls 😭",
+    "Don’t do this",
+    "Okay wow rude"
+  ];
 
-    function sayYes() {
+  let hoverCount = 0;
+
+  noButton.addEventListener("mouseover", () => {
+    // Change text
+    noButton.innerText = noTexts[Math.min(hoverCount, noTexts.length - 1)];
+    hoverCount++;
+
+    // Move button
+    const x = Math.random() * (window.innerWidth - 100);
+    const y = Math.random() * (window.innerHeight - 50);
+    noButton.style.left = x + "px";
+    noButton.style.top = y + "px";
+  });
+
+  function sayYes() {
+    document.querySelector("h1").style.display = "none";
+    document.getElementById("yes").style.display = "none";
+    document.getElementById("no").style.display = "none";
+    document.getElementById("message").style.display = "block";
+  }
+</script>
       document.querySelector("h1").style.display = "none";
       document.getElementById("yes").style.display = "none";
       document.getElementById("no").style.display = "none";
