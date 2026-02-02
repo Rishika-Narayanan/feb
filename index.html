@@ -2,17 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Important Question 💌</title>
+  <title>Valentine 💌</title>
 
   <style>
     body {
       margin: 0;
       height: 100vh;
-      background: linear-gradient(135deg, #ffdee9, #b5fffc);
+      background: #f6f6f6;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: "Comic Sans MS", cursive, sans-serif;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: #555;
     }
 
     .container {
@@ -23,95 +24,105 @@
     }
 
     h1 {
-      font-size: 3rem;
-      color: #ff2e63;
-      margin-bottom: 40px;
+      font-weight: 300;
+      letter-spacing: 2px;
+      margin-bottom: 60px;
+    }
+
+    .valentine {
+      color: #ff6b6b;
+      font-weight: 400;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-around;
+      width: 60%;
+      margin: auto;
+      margin-top: 40px;
+      position: relative;
     }
 
     button {
-      font-size: 1.5rem;
-      padding: 15px 35px;
-      border-radius: 30px;
-      border: none;
+      background: transparent;
+      border: 2px solid #777;
+      padding: 18px 40px;
+      font-size: 1.2rem;
+      letter-spacing: 2px;
       cursor: pointer;
       transition: all 0.2s ease;
-      position: absolute;
+    }
+
+    button:hover {
+      background: #eee;
     }
 
     #yes {
-      background-color: #ff2e63;
-      color: white;
-      left: 50%;
-      transform: translateX(-120%);
+      display: none; /* hidden initially */
+      border-color: #ff6b6b;
+      color: #ff6b6b;
     }
 
     #no {
-      background-color: #444;
-      color: white;
+      position: absolute;
       left: 50%;
-      transform: translateX(20%);
+      transform: translateX(-50%);
     }
 
     .message {
       display: none;
-      font-size: 3rem;
-      color: #ff2e63;
+      font-size: 2.5rem;
+      color: #ff6b6b;
+      margin-top: 40px;
     }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <h1 id="question">Will you be my Valentine? 💖</h1>
+    <h1>
+      WILL YOU BE MY <span class="valentine">VALENTINE?</span>
+    </h1>
 
-    <button id="yes">Yes 💕</button>
-    <button id="no">No 🙄</button>
+    <div class="buttons">
+      <button id="no">NO</button>
+      <button id="yes">YES</button>
+    </div>
 
     <div class="message" id="message">
-      Good decision 😌❤️<br>
-      Love youuuuu 💋
+      Correct choice ❤️<br />
+      I love you 😌
     </div>
   </div>
 
   <script>
     const noBtn = document.getElementById("no");
     const yesBtn = document.getElementById("yes");
-    const question = document.getElementById("question");
     const message = document.getElementById("message");
+    const buttons = document.querySelector(".buttons");
 
-    const noTexts = [
-      "No 🙄",
-      "Are you sure?",
-      "Think again 😏",
-      "Wrong choice 😤",
-      "Last chance 😳",
-      "Stop trying 😂",
-      "You know the answer ❤️",
-      "Just say yes already 😌"
-    ];
+    let escapeCount = 0;
 
-    let noCount = 0;
+    function moveNo() {
+      escapeCount++;
 
-    function moveNoButton() {
-      const x = Math.random() * (window.innerWidth - 150);
-      const y = Math.random() * (window.innerHeight - 150);
+      const x = Math.random() * (window.innerWidth - 200);
+      const y = Math.random() * (window.innerHeight - 200);
 
       noBtn.style.left = `${x}px`;
       noBtn.style.top = `${y}px`;
 
-      if (noCount < noTexts.length) {
-        noBtn.textContent = noTexts[noCount];
-        noCount++;
+      // After a few tries, reveal YES
+      if (escapeCount === 3) {
+        yesBtn.style.display = "inline-block";
       }
     }
 
-    noBtn.addEventListener("mouseover", moveNoButton);
-    noBtn.addEventListener("click", moveNoButton);
+    noBtn.addEventListener("mouseover", moveNo);
+    noBtn.addEventListener("click", moveNo);
 
     yesBtn.addEventListener("click", () => {
-      question.style.display = "none";
-      yesBtn.style.display = "none";
-      noBtn.style.display = "none";
+      buttons.style.display = "none";
       message.style.display = "block";
     });
   </script>
