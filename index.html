@@ -8,7 +8,13 @@
     body {
       margin: 0;
       height: 100vh;
-      background: #f6f6f6;
+      background-color: #fff1f2;
+      background-image:
+        radial-gradient(rgba(255, 182, 193, 0.25) 10%, transparent 11%),
+        radial-gradient(rgba(255, 182, 193, 0.25) 10%, transparent 11%);
+      background-size: 120px 120px;
+      background-position: 0 0, 60px 60px;
+
       display: flex;
       justify-content: center;
       align-items: center;
@@ -25,55 +31,56 @@
 
     h1 {
       font-weight: 300;
-      letter-spacing: 2px;
-      margin-bottom: 60px;
+      letter-spacing: 3px;
+      font-size: 3rem;
+      margin-top: 120px;
     }
 
     .valentine {
-      color: #ff6b6b;
-      font-weight: 400;
+      color: #ff5a5f;
+      font-weight: 500;
     }
 
-    .buttons {
-      display: flex;
-      justify-content: space-around;
-      width: 60%;
-      margin: auto;
-      margin-top: 40px;
+    .play-area {
       position: relative;
+      width: 100%;
+      height: 60vh;
+      margin-top: 40px;
     }
 
     button {
       background: transparent;
       border: 2px solid #777;
-      padding: 18px 40px;
-      font-size: 1.2rem;
+      padding: 18px 50px;
+      font-size: 1.3rem;
       letter-spacing: 2px;
       cursor: pointer;
       transition: all 0.2s ease;
+      position: absolute;
     }
 
     button:hover {
-      background: #eee;
-    }
-
-    #yes {
-      display: none; /* hidden initially */
-      border-color: #ff6b6b;
-      color: #ff6b6b;
+      background: rgba(0, 0, 0, 0.03);
     }
 
     #no {
-      position: absolute;
+      top: 40%;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translate(-50%, -50%);
     }
 
-    .message {
+    #yes {
+      border-color: #ff5a5f;
+      color: #ff5a5f;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .final-message {
       display: none;
-      font-size: 2.5rem;
-      color: #ff6b6b;
-      margin-top: 40px;
+      font-size: 2.8rem;
+      color: #ff5a5f;
+      margin-top: 120px;
     }
   </style>
 </head>
@@ -84,46 +91,83 @@
       WILL YOU BE MY <span class="valentine">VALENTINE?</span>
     </h1>
 
-    <div class="buttons">
+    <div class="play-area">
       <button id="no">NO</button>
       <button id="yes">YES</button>
     </div>
 
-    <div class="message" id="message">
-      Correct choice ❤️<br />
-      I love you 😌
+    <div class="final-message" id="final">
+      You're stuck with me.<br />
+      I love you 💓
     </div>
   </div>
 
   <script>
     const noBtn = document.getElementById("no");
     const yesBtn = document.getElementById("yes");
-    const message = document.getElementById("message");
-    const buttons = document.querySelector(".buttons");
+    const finalMsg = document.getElementById("final");
 
-    let escapeCount = 0;
+    const noTexts = [
+      "NO",
+      "Are you sure?",
+      "Really?",
+      "Think again",
+      "Bad choice",
+      "Last chance",
+      "Still no?"
+    ];
+
+    let attempts = 0;
 
     function moveNo() {
-      escapeCount++;
+      attempts++;
 
-      const x = Math.random() * (window.innerWidth - 200);
-      const y = Math.random() * (window.innerHeight - 200);
+      // Change NO text
+      noBtn.innerText = noTexts[Math.min(attempts, noTexts.length - 1)];
 
-      noBtn.style.left = `${x}px`;
-      noBtn.style.top = `${y}px`;
+      const area = document.querySelector(".play-area");
+      const maxX = area.clientWidth - noBtn.offsetWidth;
+      const maxY = area.clientHeight - noBtn.offsetHeight;
 
-      // After a few tries, reveal YES
-      if (escapeCount === 3) {
-        yesBtn.style.display = "inline-block";
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+      noBtn.style.transform = "none";
+
+      // Slowly reveal YES (but still sneaky)
+      if (attempts >= 3) {
+        yesBtn.style.opacity = "0.15";
+        yesBtn.style.pointerEvents = "auto";
+
+        yesBtn.style.top = Math.random() * maxY + "px";
+        yesBtn.style.left = Math.random() * maxX + "px";
+      }
+
+      if (attempts >= 5) {
+        yesBtn.style.opacity = "0.35";
+      }
+
+      if (attempts >= 7) {
+        yesBtn.style.opacity = "0.6";
       }
     }
 
     noBtn.addEventListener("mouseover", moveNo);
     noBtn.addEventListener("click", moveNo);
 
+    yesBtn.addEventListener("mouseover", () => {
+      // YES moves slightly too, just to be evil
+      const area = document.querySelector(".play-area");
+      yesBtn.style.top = Math.random() * (area.clientHeight - 80) + "px";
+      yesBtn.style.left = Math.random() * (area.clientWidth - 120) + "px";
+    });
+
     yesBtn.addEventListener("click", () => {
-      buttons.style.display = "none";
-      message.style.display = "block";
+      document.querySelector("h1").style.display = "none";
+      document.querySelector(".play-area").style.display = "none";
+      finalMsg.style.display = "block";
     });
   </script>
 </body>
