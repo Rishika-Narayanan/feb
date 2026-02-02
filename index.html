@@ -20,6 +20,7 @@
       align-items: center;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       color: #555;
+      overflow: hidden;
     }
 
     .container {
@@ -83,21 +84,30 @@
       margin-bottom: 25px;
     }
 
-    .final-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 25px;
-    }
-
-    .final-content img.photo {
-      width: 220px;
-      border-radius: 20px;
+    .final-content img {
+      width: 240px;
+      border-radius: 22px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
 
-    .final-content img.gif {
-      width: 200px;
+    /* HEART CONFETTI */
+    .heart {
+      position: fixed;
+      color: #ff5a5f;
+      font-size: 20px;
+      animation: floatUp 2.5s ease forwards;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-250px) scale(1.8);
+      }
     }
   </style>
 </head>
@@ -114,11 +124,9 @@
     </div>
 
     <div class="final-message" id="final">
-      <h2>You're stuck with me.<br />I love you 💓</h2>
-
+      <h2>You're stuck with me.<br>I love you 💓</h2>
       <div class="final-content">
-        <img src="him.jpg" alt="My favorite person" class="photo" />
-        <img src="love.gif" alt="Love gif" class="gif" />
+        <img src="him.jpg" alt="My favorite person">
       </div>
     </div>
   </div>
@@ -169,7 +177,6 @@
 
     yesBtn.addEventListener("mouseover", () => {
       yesMoves++;
-
       if (yesMoves <= 3) {
         randomPosition(yesBtn);
       } else if (yesMoves <= 5) {
@@ -180,10 +187,25 @@
       }
     });
 
+    function heartConfetti() {
+      for (let i = 0; i < 30; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerText = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.top = "100vh";
+        heart.style.fontSize = Math.random() * 15 + 15 + "px";
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 2500);
+      }
+    }
+
     yesBtn.addEventListener("click", () => {
       document.querySelector("h1").style.display = "none";
       document.querySelector(".play-area").style.display = "none";
       finalMsg.style.display = "block";
+      heartConfetti();
     });
   </script>
 </body>
