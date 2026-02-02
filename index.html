@@ -24,7 +24,6 @@
 
     .container {
       text-align: center;
-      position: relative;
       width: 100%;
       height: 100%;
     }
@@ -32,7 +31,7 @@
     h1 {
       font-weight: 300;
       letter-spacing: 3px;
-      font-size: 3rem;
+      font-size: 3.2rem;
       margin-top: 120px;
     }
 
@@ -44,8 +43,8 @@
     .play-area {
       position: relative;
       width: 100%;
-      height: 60vh;
-      margin-top: 40px;
+      height: 55vh;
+      margin-top: 30px;
     }
 
     button {
@@ -72,11 +71,33 @@
       pointer-events: none;
     }
 
+    /* FINAL PAGE */
     .final-message {
       display: none;
-      font-size: 2.8rem;
+      margin-top: 60px;
+    }
+
+    .final-message h2 {
+      font-size: 2.6rem;
       color: #ff5a5f;
-      margin-top: 120px;
+      margin-bottom: 25px;
+    }
+
+    .final-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .final-content img.photo {
+      width: 220px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .final-content img.gif {
+      width: 200px;
     }
   </style>
 </head>
@@ -93,8 +114,12 @@
     </div>
 
     <div class="final-message" id="final">
-      You're stuck with me.<br />
-      I love you 💓
+      <h2>You're stuck with me.<br />I love you 💓</h2>
+
+      <div class="final-content">
+        <img src="him.jpg" alt="My favorite person" class="photo" />
+        <img src="love.gif" alt="Love gif" class="gif" />
+      </div>
     </div>
   </div>
 
@@ -130,14 +155,13 @@
       noBtn.innerText = noTexts[Math.min(noAttempts, noTexts.length - 1)];
       randomPosition(noBtn);
 
-      // Reveal YES slowly
       if (noAttempts >= 3) {
         yesBtn.style.opacity = "0.25";
         yesBtn.style.pointerEvents = "auto";
         randomPosition(yesBtn);
       }
       if (noAttempts >= 5) yesBtn.style.opacity = "0.5";
-      if (noAttempts >= 7) yesBtn.style.opacity = "0.8";
+      if (noAttempts >= 7) yesBtn.style.opacity = "0.85";
     }
 
     noBtn.addEventListener("mouseover", moveNo);
@@ -146,15 +170,12 @@
     yesBtn.addEventListener("mouseover", () => {
       yesMoves++;
 
-      // YES only dodges a few times
       if (yesMoves <= 3) {
         randomPosition(yesBtn);
       } else if (yesMoves <= 5) {
-        // slower, smaller movement
         yesBtn.style.transition = "all 0.8s ease";
         randomPosition(yesBtn);
       } else {
-        // stops moving completely
         yesBtn.style.transition = "none";
       }
     });
