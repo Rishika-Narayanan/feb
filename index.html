@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Important Question 👀</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #ffe6f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    #yes {
+      background: #ff4d88;
+      color: white;
+    }
+
+    #no {
+      background: #ddd;
+      position: absolute;
+    }
+
+    #message {
+      display: none;
+      font-size: 20px;
+      margin-top: 20px;
+      color: #ff4d88;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>Will you be my Valentine? ❤️</h1>
+    <button id="yes" onclick="sayYes()">Yes 😍</button>
+    <button id="no">No 🙄</button>
+
+    <div id="message">
+      Good decision 😌 <br>I love you ❤️
+    </div>
+  </div>
+
+  <script>
+    const noButton = document.getElementById("no");
+
+    noButton.addEventListener("mouseover", () => {
+      const x = Math.random() * (window.innerWidth - 100);
+      const y = Math.random() * (window.innerHeight - 50);
+      noButton.style.left = x + "px";
+      noButton.style.top = y + "px";
+    });
+
+    function sayYes() {
+      document.querySelector("h1").style.display = "none";
+      document.getElementById("yes").style.display = "none";
+      document.getElementById("no").style.display = "none";
+      document.getElementById("message").style.display = "block";
+    }
+  </script>
+
+</body>
+</html>
