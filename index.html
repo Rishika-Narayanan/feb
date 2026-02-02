@@ -2,211 +2,183 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Valentine 💌</title>
-
+  <title>Valentine?</title>
   <style>
     body {
       margin: 0;
       height: 100vh;
-      background-color: #fff1f2;
-      background-image:
-        radial-gradient(rgba(255, 182, 193, 0.25) 10%, transparent 11%),
-        radial-gradient(rgba(255, 182, 193, 0.25) 10%, transparent 11%);
-      background-size: 120px 120px;
-      background-position: 0 0, 60px 60px;
-
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      color: #555;
+      background: #fafafa;
+      font-family: "Helvetica Neue", Arial, sans-serif;
       overflow: hidden;
     }
 
     .container {
       text-align: center;
-      width: 100%;
-      height: 100%;
+      position: relative;
     }
 
     h1 {
       font-weight: 300;
-      letter-spacing: 3px;
-      font-size: 3.2rem;
-      margin-top: 120px;
+      letter-spacing: 2px;
+      color: #444;
     }
 
-    .valentine {
-      color: #ff5a5f;
-      font-weight: 500;
+    h1 span {
+      color: #e76f6f;
     }
 
-    .play-area {
+    .buttons {
+      margin-top: 40px;
+      display: flex;
+      gap: 120px;
+      justify-content: center;
       position: relative;
-      width: 100%;
-      height: 55vh;
-      margin-top: 30px;
     }
 
     button {
-      background: transparent;
-      border: 2px solid #777;
-      padding: 18px 50px;
-      font-size: 1.3rem;
-      letter-spacing: 2px;
+      padding: 14px 40px;
+      font-size: 18px;
+      border: 2px solid #444;
+      background: white;
       cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      background: #f3f3f3;
+    }
+
+    #yesBtn {
       position: absolute;
-      transition: all 0.4s ease;
-    }
-
-    #no {
-      top: 40%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translateX(-50%);
     }
 
-    #yes {
-      border-color: #ff5a5f;
-      color: #ff5a5f;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    /* FINAL PAGE */
-    .final-message {
-      display: none;
-      margin-top: 60px;
-    }
-
-    .final-message h2 {
-      font-size: 2.6rem;
-      color: #ff5a5f;
-      margin-bottom: 25px;
-    }
-
-    .final-content img {
-      width: 240px;
-      border-radius: 22px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    }
-
-    /* HEART CONFETTI */
-    .heart {
+    canvas {
       position: fixed;
-      color: #ff5a5f;
-      font-size: 20px;
-      animation: floatUp 2.5s ease forwards;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
       pointer-events: none;
-    }
-
-    @keyframes floatUp {
-      0% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-      100% {
-        opacity: 0;
-        transform: translateY(-250px) scale(1.8);
-      }
+      z-index: 10;
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <h1>
-      WILL YOU BE MY <span class="valentine">VALENTINE?</span>
-    </h1>
 
-    <div class="play-area">
-      <button id="no">NO</button>
-      <button id="yes">YES</button>
-    </div>
+<canvas id="confetti"></canvas>
 
-    <div class="final-message" id="final">
-      <h2>You're stuck with me.<br>I love you 💓</h2>
-      <div class="final-content">
-        <img src="him.jpg" alt="My favorite person">
-      </div>
-    </div>
+<div class="container">
+  <h1>WILL YOU BE MY <span>VALENTINE?</span></h1>
+
+  <div class="buttons">
+    <button id="noBtn">NO</button>
+    <button id="yesBtn">YES</button>
   </div>
+</div>
 
-  <script>
-    const noBtn = document.getElementById("no");
-    const yesBtn = document.getElementById("yes");
-    const finalMsg = document.getElementById("final");
-    const area = document.querySelector(".play-area");
+<script>
+  const yesBtn = document.getElementById("yesBtn");
+  const noBtn = document.getElementById("noBtn");
 
-    const noTexts = [
-      "NO",
-      "Are you sure?",
-      "Really?",
-      "Think again",
-      "Bad choice",
-      "Still no?",
-      "Just say yes"
-    ];
+  let moveCount = 0;
+  let speedFactor = 1;
 
-    let noAttempts = 0;
-    let yesMoves = 0;
+  function moveYes() {
+    moveCount++;
 
-    function randomPosition(btn) {
-      const maxX = area.clientWidth - btn.offsetWidth;
-      const maxY = area.clientHeight - btn.offsetHeight;
-      btn.style.left = Math.random() * maxX + "px";
-      btn.style.top = Math.random() * maxY + "px";
-      btn.style.transform = "none";
+    // After 3–4 tries, slow down movement
+    if (moveCount > 4) {
+      speedFactor = 0.4;
     }
 
-    function moveNo() {
-      noAttempts++;
-      noBtn.innerText = noTexts[Math.min(noAttempts, noTexts.length - 1)];
-      randomPosition(noBtn);
+    const maxX = window.innerWidth - yesBtn.offsetWidth;
+    const maxY = window.innerHeight - yesBtn.offsetHeight;
 
-      if (noAttempts >= 3) {
-        yesBtn.style.opacity = "0.25";
-        yesBtn.style.pointerEvents = "auto";
-        randomPosition(yesBtn);
-      }
-      if (noAttempts >= 5) yesBtn.style.opacity = "0.5";
-      if (noAttempts >= 7) yesBtn.style.opacity = "0.85";
-    }
+    const x = Math.random() * maxX * speedFactor;
+    const y = Math.random() * maxY * speedFactor;
 
-    noBtn.addEventListener("mouseover", moveNo);
-    noBtn.addEventListener("click", moveNo);
+    yesBtn.style.left = `${x}px`;
+    yesBtn.style.top = `${y}px`;
+  }
 
-    yesBtn.addEventListener("mouseover", () => {
-      yesMoves++;
-      if (yesMoves <= 3) {
-        randomPosition(yesBtn);
-      } else if (yesMoves <= 5) {
-        yesBtn.style.transition = "all 0.8s ease";
-        randomPosition(yesBtn);
-      } else {
-        yesBtn.style.transition = "none";
-      }
+  yesBtn.addEventListener("mouseenter", moveYes);
+  noBtn.addEventListener("mouseenter", moveYes);
+
+  yesBtn.addEventListener("click", () => {
+    startConfetti();
+    setTimeout(() => {
+      alert("YAY 💖 Valentine confirmed!");
+    }, 300);
+  });
+
+  // ❤️ HEART CONFETTI (FULL SCREEN)
+  const canvas = document.getElementById("confetti");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let hearts = [];
+
+  function createHeart() {
+    return {
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 20 + 10,
+      speedY: Math.random() * 2 + 1,
+      speedX: Math.random() * 2 - 1,
+      alpha: 1
+    };
+  }
+
+  function drawHeart(h) {
+    ctx.save();
+    ctx.globalAlpha = h.alpha;
+    ctx.fillStyle = "#e63946";
+    ctx.beginPath();
+    ctx.moveTo(h.x, h.y);
+    ctx.bezierCurveTo(h.x - h.size / 2, h.y - h.size / 2,
+                      h.x - h.size, h.y + h.size / 3,
+                      h.x, h.y + h.size);
+    ctx.bezierCurveTo(h.x + h.size, h.y + h.size / 3,
+                      h.x + h.size / 2, h.y - h.size / 2,
+                      h.x, h.y);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function animateConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    hearts.forEach((h, i) => {
+      h.y += h.speedY;
+      h.x += h.speedX;
+      h.alpha -= 0.01;
+
+      if (h.alpha <= 0) hearts.splice(i, 1);
+      else drawHeart(h);
     });
 
-    function heartConfetti() {
-      for (let i = 0; i < 30; i++) {
-        const heart = document.createElement("div");
-        heart.className = "heart";
-        heart.innerText = "💖";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.top = "100vh";
-        heart.style.fontSize = Math.random() * 15 + 15 + "px";
-        document.body.appendChild(heart);
+    if (hearts.length > 0) requestAnimationFrame(animateConfetti);
+  }
 
-        setTimeout(() => heart.remove(), 2500);
-      }
+  function startConfetti() {
+    hearts = [];
+    for (let i = 0; i < 120; i++) {
+      hearts.push(createHeart());
     }
+    animateConfetti();
+  }
 
-    yesBtn.addEventListener("click", () => {
-      document.querySelector("h1").style.display = "none";
-      document.querySelector(".play-area").style.display = "none";
-      finalMsg.style.display = "block";
-      heartConfetti();
-    });
-  </script>
+  window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+</script>
+
 </body>
 </html>
