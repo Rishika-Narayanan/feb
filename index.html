@@ -2,104 +2,118 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Important Question 👀</title>
+  <title>Important Question 💌</title>
+
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #ffe6f0;
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #ffdee9, #b5fffc);
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
+      font-family: "Comic Sans MS", cursive, sans-serif;
     }
 
-    .card {
-      background: white;
-      padding: 40px;
-      border-radius: 20px;
+    .container {
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    h1 {
+      font-size: 3rem;
+      color: #ff2e63;
+      margin-bottom: 40px;
     }
 
     button {
-      padding: 12px 25px;
-      font-size: 16px;
+      font-size: 1.5rem;
+      padding: 15px 35px;
+      border-radius: 30px;
       border: none;
-      border-radius: 25px;
       cursor: pointer;
-      margin: 10px;
-    }
-
-    #yes {
-      background: #ff4d88;
-      color: white;
-    }
-
-    #no {
-      background: #ddd;
+      transition: all 0.2s ease;
       position: absolute;
     }
 
-    #message {
+    #yes {
+      background-color: #ff2e63;
+      color: white;
+      left: 50%;
+      transform: translateX(-120%);
+    }
+
+    #no {
+      background-color: #444;
+      color: white;
+      left: 50%;
+      transform: translateX(20%);
+    }
+
+    .message {
       display: none;
-      font-size: 20px;
-      margin-top: 20px;
-      color: #ff4d88;
+      font-size: 3rem;
+      color: #ff2e63;
     }
   </style>
 </head>
-<body>
 
-  <div class="card">
-    <h1>Will you be my Valentine? ❤️</h1>
-    <button id="yes" onclick="sayYes()">Yes 😍</button>
+<body>
+  <div class="container">
+    <h1 id="question">Will you be my Valentine? 💖</h1>
+
+    <button id="yes">Yes 💕</button>
     <button id="no">No 🙄</button>
 
-    <div id="message">
-      Good decision 😌 <br>I love you ❤️
+    <div class="message" id="message">
+      Good decision 😌❤️<br>
+      Love youuuuu 💋
     </div>
   </div>
 
- <script>
-  const noButton = document.getElementById("no");
+  <script>
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+    const question = document.getElementById("question");
+    const message = document.getElementById("message");
 
-  const noTexts = [
-    "No 🙄",
-    "Are you sure?",
-    "Really sure??",
-    "Pls 😭",
-    "Don’t do this",
-    "Okay wow rude"
-  ];
+    const noTexts = [
+      "No 🙄",
+      "Are you sure?",
+      "Think again 😏",
+      "Wrong choice 😤",
+      "Last chance 😳",
+      "Stop trying 😂",
+      "You know the answer ❤️",
+      "Just say yes already 😌"
+    ];
 
-  let hoverCount = 0;
+    let noCount = 0;
 
-  noButton.addEventListener("mouseover", () => {
-    // Change text
-    noButton.innerText = noTexts[Math.min(hoverCount, noTexts.length - 1)];
-    hoverCount++;
+    function moveNoButton() {
+      const x = Math.random() * (window.innerWidth - 150);
+      const y = Math.random() * (window.innerHeight - 150);
 
-    // Move button
-    const x = Math.random() * (window.innerWidth - 100);
-    const y = Math.random() * (window.innerHeight - 50);
-    noButton.style.left = x + "px";
-    noButton.style.top = y + "px";
-  });
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
 
-  function sayYes() {
-    document.querySelector("h1").style.display = "none";
-    document.getElementById("yes").style.display = "none";
-    document.getElementById("no").style.display = "none";
-    document.getElementById("message").style.display = "block";
-  }
-</script>
-      document.querySelector("h1").style.display = "none";
-      document.getElementById("yes").style.display = "none";
-      document.getElementById("no").style.display = "none";
-      document.getElementById("message").style.display = "block";
+      if (noCount < noTexts.length) {
+        noBtn.textContent = noTexts[noCount];
+        noCount++;
+      }
     }
-  </script>
 
+    noBtn.addEventListener("mouseover", moveNoButton);
+    noBtn.addEventListener("click", moveNoButton);
+
+    yesBtn.addEventListener("click", () => {
+      question.style.display = "none";
+      yesBtn.style.display = "none";
+      noBtn.style.display = "none";
+      message.style.display = "block";
+    });
+  </script>
 </body>
 </html>
